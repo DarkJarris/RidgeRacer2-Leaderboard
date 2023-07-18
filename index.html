@@ -1,0 +1,45 @@
+<html>
+<head>
+	<title>DarkJarris' Ridge Racer 2 Laptime Checkup Tool</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+
+<div class="main">
+<h1>DarkJarris' Ridge Racer 2 Laptime Checkup Tool</h1>
+<p>Welcome to the laptime checkup tool.</p>
+
+<p>The Laptime Checkup Tool was created by neccesity of having a very small overlay, too small to simply drag a browser window arround to make the speedruns.com page fit.<br>
+I have minified it to the essentials, so it can fit at the narrowest, a 240 pixel wide gap.</p>
+
+<p>You can use this to look up times on the fly on the side of your screen, to see which times you'll tackle next, or to insert into the streaming set up to show your viewers where things are.</p>
+
+<p>Currently on the Ridge Racer 2 speedrun page, there are 2 categories for all of the various races, Class 6 car, and Special Class car.<br>
+This tool will work with either, though will not currently work with other classes, as they do not exist as categories on the speedrun site.</p>
+
+<h2>Usage</h2>
+<h3>- In-Browser</h3>
+
+Open a new browser window, head to this website, and press either of the following 2 buttons.<br>
+<a href="Leaderboards.html?class=6"><button>Class 6 Cars</button></a>
+<a href="Leaderboards.html?class=Special"><button>Special Class Cars</button></a>
+
+<p>Open OBS, and add a new "Screen/Window Capture" element, and line everything up.</p>
+
+<h3>- In-OBS</h3>
+<p>Open OBS, and add a new "BrowserSource" Element.<br>
+Set the URL to either:<br>
+https://darkjarris.bitbucket.io/RR2Times/Leaderboards.html?class=6<br>
+https://darkjarris.bitbucket.io/RR2Times/Leaderboards.html?class=Special</p>
+
+<p>Ideal height is 900 pixels tall, and ideal width is between 240-300 pixels wide. you may wish to set a Filter to scroll vertically. I found that 30 has a good feel to it</p>
+
+</div>
+
+</body>
+
+</html>

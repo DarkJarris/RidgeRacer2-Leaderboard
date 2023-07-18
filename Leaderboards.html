@@ -1,0 +1,158 @@
+<html>
+<head>
+	<style>
+		body {background-color:black;color:white;}
+		table {border:0;text-align:center;vertical-align:middle;width:240px;}
+		#time {font-size:17px;}
+		#name {font-size:14px;}
+	</style>
+</head>
+
+<body>
+
+<script>
+// full IL listings in json
+// https://www.speedrun.com/api/v1/games/o1y9rg46/levels
+// Example run to get all the appropriate data
+// https://www.speedrun.com/api/v1/leaderboards/o1y9rg46/level/ewpry1kd/vdo3le1d?embed=players
+
+var json_obj = '';
+var json_obj2 = '';
+var input;
+
+
+// Get the current URL Paramters to show the table data
+function getQueryParams(qs) {
+    qs = qs.split('+').join(' ');
+    var params = {},
+        tokens,
+        re = /[?&]?([^=]+)=([^&]*)/g;
+    while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+    }
+    return params;
+}
+var myParam = location.search.split('class=')[1] ? location.search.split('class=')[1] : 6;
+
+// The category ID's for Foward, Reverse, Special Forward, Special Reverse
+// In an array, that we call during the loops.
+// Absolute bitch to get hold of all these ID's be the way.
+// 0: Forward : vdo3le1d
+// 1: Reverse : wkpvxw0k
+// 2: Special Forward : n2y74912
+// 3: Special Reverse : 7kj158zk
+var Category = ["vdo3le1d", "wkpvxw0k", "n2y74912", "7kj158zk"];
+var CategoryName = ["Forward", "Reverse", "Special<br>Forward", "Special<br>Reverse"];
+
+// An array containing the Sppedrun.com ID's for the individual races.
+// technically speaking, you should be able to use the full names too
+// such as Seaside_Rute_765, but the API suggests using ID's.
+var Levels = ["ewpry1kd", "y9m8375d", "5wkpo52d", "5925l2o9", "29v2x43d", 
+				  "xd4xz429", "xd0xymxd", "rw63x8rw", "n93oevn9", "z98nqyg9",
+				  "rdnn86qd", "ldy26nkw", "n93oevz9", "z98nqyp9", "rdnn867d",
+				  "ldy26nrw", "gdr2lml9", "nwl31qew", "rdnngo7d", "ywelgr79",
+				  "69zzjyg9"
+				];
+
+// Function to get the JSON from the server and throw it into a variable for us to use
+function Get(yourUrl){
+    var Httpreq = new XMLHttpRequest(); // a new request
+    Httpreq.open("GET",yourUrl,false);
+    Httpreq.send(null);
+    return Httpreq.responseText;          
+}
+
+
+// Write Actual table data.
+document.write("<table>");
+if (myParam == 6) {
+document.write("<tr><td></td><th>"+ CategoryName[0] +"</th><th>"+ CategoryName[1] +"</th></tr>");
+}
+if (myParam == "Special" || myParam == "special") {
+document.write("<tr><td></td><th>"+ CategoryName[2] +"</th><th>"+ CategoryName[3] +"</th></tr>");
+}
+
+// Loop thtough all of the levels in the Levels array
+for (var i = 0; i < Levels.length; i++) 
+	{
+		document.write("<tr>");
+		// Add the table row and badge
+		document.write("<td><img src='./badges/" + Levels[i] + ".png' style='width:35px'></td>");
+		// Loop Categories
+			// Grab the latest scores from the server.
+			if (myParam == 6) {			
+			var json_obj = JSON.parse(Get("https://www.speedrun.com/api/v1/leaderboards/o1y9rg46/level/"+ Levels[i] +"/"+ Category[0] +"?embed=players"));
+			var json_obj2 = JSON.parse(Get("https://www.speedrun.com/api/v1/leaderboards/o1y9rg46/level/"+ Levels[i] +"/"+ Category[1] +"?embed=players"));
+			}
+			
+			if (myParam == "Special" || myParam == "special") {
+			var json_obj = JSON.parse(Get("https://www.speedrun.com/api/v1/leaderboards/o1y9rg46/level/"+ Levels[i] +"/"+ Category[2] +"?embed=players"));
+			var json_obj2 = JSON.parse(Get("https://www.speedrun.com/api/v1/leaderboards/o1y9rg46/level/"+ Levels[i] +"/"+ Category[3] +"?embed=players"));
+			}
+			
+			// Convert servers time to human readable
+			if (json_obj.data.runs[0])
+			{
+				input = json_obj.data.runs[0].run.times.primary_t;
+				name = json_obj.data.players.data[0].names.international;
+			}
+			else
+			{		
+				name= "---";
+				inputs = undefined;
+			}
+			
+			
+			if (input) {
+			input = input.toString();
+			var res = input.split(".");
+			var date = new Date(null);
+			date.setSeconds(res[0]); // specify value for SECONDS here
+			var result = date.toISOString().substr(11, 8);
+			var minsec = result.split(":");
+			
+			// Print time result
+			document.write("<td><span id=time>" + minsec[1] + ":" + minsec[2] +"." + res[1] + "</span><br>");
+			// Add the player's name
+			document.write("<span id=name>" +name +"</span></td>");}
+			else
+			{document.write("<td>" +name +"</td>");}
+			
+			// Convert servers time to human readable
+			if (json_obj2.data.runs[0])
+			{
+				input = json_obj2.data.runs[0].run.times.primary_t;
+				name = json_obj2.data.players.data[0].names.international;
+			}
+			else
+			{
+				name= "---";
+				inputs = undefined;
+			}
+			
+			if (input) {
+			input = input.toString();
+			var res = input.split(".");
+			var date = new Date(null);
+			date.setSeconds(res[0]); // specify value for SECONDS here
+			var result = date.toISOString().substr(11, 8);
+			var minsec = result.split(":");
+			
+			// Print time result
+			document.write("<td><span id=time>" + minsec[1] + ":" + minsec[2] +"." + res[1] + "</span><br>");
+			// Add the player's name
+			document.write("<span id=name>" +name +"</span></td>");}
+			else
+			{document.write("<td>" +name +"</td>");}
+					
+		
+		// End the row
+		document.write("</tr>");
+	}
+
+// End the table entirely, job is done
+document.write("</table>");
+</script>
+</body>
+
+</html>
